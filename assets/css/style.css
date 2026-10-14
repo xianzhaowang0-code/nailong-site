@@ -220,9 +220,6 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size
   border:1px solid rgba(242,199,68,.55); border-radius:999px;
   color:var(--gold); font-size:14.5px; letter-spacing:4px;
 }
-.hero__desc{
-  color:#c8d5ee; font-size:15.5px; max-width:520px; margin:0 0 30px;
-}
 .hero__cta{display:flex; gap:14px; flex-wrap:wrap}
 
 .btn{
@@ -287,30 +284,8 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size
 }
 .section__sub{margin:16px 0 0; color:var(--muted); font-size:15px}
 
-/* ---------- 学校概况 ---------- */
-.about{
-  display:grid; grid-template-columns:1.35fr 1fr; gap:clamp(28px,4vw,56px);
-  align-items:start;
-}
-.about__body{font-size:16px; color:#33404f}
-.about__body p{margin-bottom:1.1em}
-.about__body p:last-child{margin-bottom:0}
-
-.stats{
-  list-style:none; margin:0; padding:0;
-  display:grid; grid-template-columns:repeat(2,1fr); gap:14px;
-}
-.stat{
-  background:var(--white); border:1px solid var(--line); border-radius:var(--radius);
-  padding:22px 16px; text-align:center; box-shadow:var(--shadow-sm);
-  transition:transform .22s, box-shadow .22s, border-color .22s;
-}
-.stat:hover{transform:translateY(-3px); box-shadow:var(--shadow-md); border-color:#cfdcf2}
-.stat__num{
-  display:block; font-size:clamp(26px,3.4vw,34px); color:var(--blue-700);
-  font-family:var(--serif); line-height:1.1;
-}
-.stat__label{display:block; margin-top:6px; font-size:13px; color:var(--muted); letter-spacing:1px}
+/* 只有标题没有正文的区块，收紧下边距 */
+.section__head--tight{margin-bottom:0}
 
 /* ---------- 院系卡片 ---------- */
 .cards{
@@ -415,7 +390,6 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size
 
 /* ---------- 响应式 ---------- */
 @media (max-width:1000px){
-  .about{grid-template-columns:1fr}
   .gallery{grid-template-columns:repeat(2,1fr)}
   .hero__mascot{height:clamp(220px,30vw,340px)}
 }
@@ -436,7 +410,6 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size
   .hero__mascot{
     position:absolute; right:-6%; bottom:0; height:210px; opacity:.5; z-index:-1;
   }
-  .hero__desc{font-size:14.5px}
   .btn--lg{padding:14px 26px; font-size:15px}
   .search{flex:1 1 100%}
   .brand__en{letter-spacing:1.6px}
@@ -449,7 +422,6 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size
   .gallery__item--wide{grid-column:span 1}
   .gallery__item,.gallery__item--wide{aspect-ratio:16/10}
   .gallery__item--logo{aspect-ratio:1/1}
-  .stats{grid-template-columns:repeat(2,1fr)}
   .btn{padding:12px 22px; font-size:14px}
   .btn--lg{width:100%; text-align:center; padding:15px 20px; font-size:15px}
   .hero__cta{flex-direction:column; align-items:stretch}
