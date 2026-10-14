@@ -197,55 +197,74 @@ python3 -c "import socket;print(socket.getaddrinfo('xn--vhq90kl3fz5byvotjhjqlnj2
 curl -sI "https://xn--vhq90kl3fz5byvotjhjqlnj2b9s4b3it.icu"
 ```
 
-## 六、GitHub Pages 实测踩坑：CNAME 文件在 punycode 域名上会导致构建失败
+## 六、GitHub Pages 建站实测记录（含一次被推翻的错误结论）
 
-这是 2026-10-14 在电脑端实际建站时踩到的坑，**推翻了本笔记前面「配套动作：仓库根目录放 `CNAME` 文件」的建议**。
+2026-10-14 在电脑端实际建站的过程与证据。
 
 ### 症状
 
-仓库建好、Pages 开启后，构建立刻失败：
+仓库建好、Pages 开启后，前两次构建失败：
 
 ```
 pages.status   = errored
 build.status   = errored
 build.error    = "Page build failed."
-build.duration = 0          <-- 关键: 恒为 0, 构建任务根本没跑起来
-https_certificate.state = (空)
+build.duration = 0
 ```
 
 站点在自定义域名和 `xianzhaowang0-code.github.io/nailong-site/` 上**都**返回 404。
-说明不是「域名没指过来」，而是**构建从来没成功过**。
 
-### 排查过程
+### ⚠️ 一个被推翻的结论（保留作为教训）
 
-| 步骤 | 操作 | 结果 |
+当时的排查：把仓库里的 `CNAME` 文件删掉、并清空 Pages 的 cname 设置后，构建成功了。
+于是当场得出结论「**`CNAME` 文件在 punycode 域名上会导致构建失败**」，并写进了本笔记。
+
+**这个结论是错的。** 后来的对照测试推翻了它：
+
+| commit | 仓库里有 CNAME 文件 | 构建结果 |
 |---|---|---|
-| 1 | 浅克隆仓库，核对文件 | 文件齐全，`CNAME` 内容为正确的 punycode |
-| 2 | 访问 `github.io` 原始地址 | 同样 404 → 排除 DNS / 自定义域名指向问题 |
-| 3 | **从仓库删除 `CNAME` 文件**，清空 Pages 的 cname 设置，触发构建 | ✅ `built`，`duration=46185ms` |
-| 4 | 用 `PUT /repos/:owner/:repo/pages` 把 cname 设回同一域名（**仓库里仍无 `CNAME` 文件**） | ✅ `built`，`duration=26289ms` |
+| `c2c51c9` | 有 | errored, errored ← **唯一真正的失败** |
+| `83dd988` | **无** | errored(dur=0) + **built**(dur=46185) |
+| `828f9dd` | 有 | errored(dur=0) + **built**(dur=26289) |
+| `828f9dd`（重新触发） | 有 | **built**(dur=20042) |
 
-### 结论
+两个关键反证：
 
-**变量只有一个：仓库里有没有 `CNAME` 文件。**
+1. `83dd988` **没有** `CNAME` 文件，却同样出现了一条 `errored / dur=0` 的构建。
+   → 这条 `errored / dur=0` 是**伴随产生的噪音构建**，不代表失败。
+   真正的失败特征是「两次构建全部 errored，没有任何 built」。
+2. `828f9dd` **有** `CNAME` 文件，构建成功；重新触发一次仍然成功。
 
-- 有 `CNAME` 文件（内容为 punycode 域名）→ `Page build failed.`
-- 无 `CNAME` 文件，域名改用 Pages 设置配置 → 构建成功
+### 排查方法上的错误
 
-GitHub Pages 的 legacy 构建器在处理 IDN / punycode 自定义域名时，
-无法正确消化仓库里的 `CNAME` 文件。**表现是构建整体失败**，
-而不是「域名没生效」这种相对温和的失败 —— 很容易误判成 DNS 问题。
+第一次「隔离实验」同时改动了**两个**变量：
 
-### 正确做法
+- 删掉 `CNAME` 文件
+- 清空 Pages 的自定义域名设置
+
+而且两次操作之间隔了约 4 分钟 —— 这期间用户正好把**剩余三条 A 记录补齐了**。
+所以「删 CNAME 之后就好了」是**混淆变量**导致的假因果。正确做法是一次只改一个变量。
+
+### 最可能的原因
+
+初始两次失败发生在 Pages 刚开启后的头几秒，且当时自定义域名的 DNS 只配了
+**1 条 A 记录（缺 3 条）**。DNS 未就绪 + Pages 刚启用，两者叠加导致构建失败。
+A 记录补齐、Pages 完成初始化后，构建恢复正常，**与 `CNAME` 文件无关**。
+
+> 诚实说明：没有再做「故意把 DNS 改坏以复现失败」的实验，
+> 所以「DNS 未就绪是唯一原因」这一点属于**推断**，不是实测结论。
+> 但「`CNAME` 文件导致失败」这一点已被上表**明确证伪**。
+
+### 现在的正确做法
+
+`CNAME` 文件是 GitHub Pages 的官方做法，本项目**保留它**，内容为 punycode 域名。
 
 ```bash
-# 不要往仓库里放 CNAME 文件。域名走 Pages 设置：
-
 # 开启 Pages, 源 = main 分支根目录
 POST /repos/:owner/:repo/pages
 { "source": { "branch": "main", "path": "/" } }
 
-# 设置自定义域名 (punycode)
+# 设置自定义域名 (punycode) —— 无 CNAME 文件时用这个
 PUT  /repos/:owner/:repo/pages
 { "cname": "xn--vhq90kl3fz5byvotjhjqlnj2b9s4b3it.icu" }
 
@@ -254,9 +273,11 @@ PUT  /repos/:owner/:repo/pages
 { "https_enforced": true }
 ```
 
-网页端等价操作：Settings → Pages → Custom domain 填 punycode 域名。
+> **注意**：一旦在网页端 Settings → Pages 里设置过自定义域名，
+> GitHub 会**自动补一个 `CNAME` 文件**，commit message 为 `Create CNAME`。
+> 这是正常行为，不要删。
 
-### 顺带记录
+### 顺带记录（这些是确认无误的）
 
 - 第一次 `git push` 遇到 `502`，但 `ls-remote` 正常 → 属**偶发**，重试即可，不是权限问题
 - 推送时用 `git -c http.extraheader="Authorization: Basic <base64>"`，
@@ -264,3 +285,5 @@ PUT  /repos/:owner/:repo/pages
 - 用经典 token 时 `repo` 是父级、必须整体勾选；
   只勾子项 `repo: status` 拿不到建仓库 / 推送 / 配 Pages 的权限
 - 细粒度 token（`github_pat_` 开头）**没有创建仓库的权限**，`POST /user/repos` 返回 403
+- 阿里云 DNS 的 TTL 缓存会让各公共解析器进度不一：
+  A 记录补齐后，`1.1.1.1` / `8.8.8.8` 立刻见四条，`223.5.5.5` 仍返回旧的一条，最长 600 秒
