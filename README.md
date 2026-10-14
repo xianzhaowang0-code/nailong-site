@@ -13,11 +13,20 @@ Punycode：`xn--vhq90kl3fz5byvotjhjqlnj2b9s4b3it.icu`
 
 | 文件 | 作用 |
 |---|---|
-| `index.html` | 单文件占位页，无任何外部请求 |
+| `index.html` | 首页（零依赖静态页面） |
+| `assets/css/style.css` | 全部样式，无外部字体 / 无 CDN |
+| `assets/js/main.js` | 轮播、移动端菜单、院系搜索过滤、滚动高亮 |
+| `assets/img/` | 校徽、校园照、形象大使、favicon |
+| `CNAME` | GitHub Pages 自定义域名（由 Pages 设置自动创建） |
 | `.nojekyll` | 阻止 GitHub Pages 走 Jekyll 构建 |
 | `verify.ps1` | Windows 端部署验证脚本 |
-| `DEPLOY.md` | 部署笔记（DNS / 备案 / 记录冲突规则） |
+| `DEPLOY.md` | 部署笔记（DNS / 备案 / 记录冲突规则 / 踩坑记录） |
 | `CONVERSATION.md` | 从手机端转来的对话记录与交接说明 |
+
+### 页面结构
+
+公告条 → 顶栏 → 头部（校徽 + 搜索）→ 导航 → 首屏轮播 → 学校概况 →
+院系设置（支持搜索过滤）→ 校园风光 → 友情链接 → 页脚免责声明
 
 > `CNAME` 文件（内容为 punycode 域名）由 GitHub 在网页端
 > Settings → Pages 设置自定义域名时自动创建，commit message 为 `Create CNAME`，属正常行为。

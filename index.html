@@ -4,63 +4,280 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>济南奶龙职业技术学院</title>
-<meta name="description" content="济南奶龙职业技术学院 · 站点建设中">
-<style>
-  :root{
-    --bg:#0f1115; --card:#171a21; --line:#262b36;
-    --fg:#e8eaf0; --dim:#8b93a7; --accent:#6ea8fe;
-  }
-  @media (prefers-color-scheme: light){
-    :root{ --bg:#f6f7f9; --card:#fff; --line:#e4e7ec;
-           --fg:#1a1d23; --dim:#69718a; --accent:#2563eb; }
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0; background:var(--bg); color:var(--fg);
-    font:16px/1.7 -apple-system,BlinkMacSystemFont,"PingFang SC",
-         "Hiragino Sans GB","Microsoft YaHei",sans-serif;
-    display:flex; align-items:center; justify-content:center; padding:24px;
-  }
-  main{
-    width:100%; max-width:560px; background:var(--card);
-    border:1px solid var(--line); border-radius:16px;
-    padding:40px 32px; text-align:center;
-  }
-  .dot{
-    width:8px; height:8px; border-radius:50%; background:var(--accent);
-    display:inline-block; margin-right:8px; vertical-align:middle;
-    animation:pulse 2s ease-in-out infinite;
-  }
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
-  h1{ font-size:22px; margin:0 0 8px; letter-spacing:.5px; }
-  .sub{ color:var(--dim); font-size:14px; margin:0 0 28px; }
-  .status{
-    display:inline-block; border:1px solid var(--line); border-radius:999px;
-    padding:6px 16px; font-size:13px; color:var(--dim); margin-bottom:28px;
-  }
-  hr{ border:0; border-top:1px solid var(--line); margin:28px 0; }
-  .meta{ font-size:12px; color:var(--dim); line-height:1.9; word-break:break-all; }
-  code{ font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:11px; }
-</style>
+<meta name="description" content="济南奶龙职业技术学院 · 官方网站。本站为玩笑域名，与任何真实学校、教育机构及「奶龙」IP 权利方均无关系。">
+<meta name="theme-color" content="#17458f">
+
+<link rel="icon" href="assets/img/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="assets/img/favicon.png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="济南奶龙职业技术学院">
+<meta property="og:description" content="校训：厚德 · 博学 · 干饭 · 摸鱼">
+<meta property="og:image" content="assets/img/logo.png">
+
+<link rel="stylesheet" href="assets/css/style.css">
+<script src="assets/js/main.js" defer></script>
 </head>
 <body>
-<main>
-  <h1>济南奶龙职业技术学院</h1>
-  <p class="sub">Jinan Nailong Vocational &amp; Technical College</p>
+<a class="skip-link" href="#main">跳到主要内容</a>
 
-  <div class="status"><span class="dot"></span>站点正在建设中</div>
-
-  <p style="color:var(--dim);font-size:14px;margin:0">
-    域名已经注册，页面还没开始搭。<br>
-    这里很快会有东西。
+<!-- ============ 公告条 ============ -->
+<div class="notice" role="note">
+  <span class="notice__tag">公告</span>
+  <p class="notice__text">
+    本站是一个<strong>玩笑域名</strong>，与任何真实学校、教育机构，以及「奶龙」IP 权利方均无任何关系。
   </p>
+</div>
 
-  <hr>
-  <p class="meta">
-    域名：济南奶龙职业技术学院.icu<br>
-    Punycode：<code>xn--vhq90kl3fz5byvotjhjqlnj2b9s4b3it.icu</code>
-  </p>
+<!-- ============ 顶栏 ============ -->
+<div class="topbar">
+  <div class="wrap topbar__inner">
+    <span class="topbar__slogan">厚德 · 博学 · 干饭 · 摸鱼</span>
+    <nav class="topbar__links" aria-label="辅助导航">
+      <a href="#about">学校概况</a>
+      <a href="#departments">院系设置</a>
+      <a href="#campus">校园风光</a>
+      <a href="#links">友情链接</a>
+    </nav>
+  </div>
+</div>
+
+<!-- ============ 头部 ============ -->
+<header class="header">
+  <div class="wrap header__inner">
+    <a class="brand" href="#top">
+      <img class="brand__logo" src="assets/img/logo.png" alt="济南奶龙职业技术学院校徽" width="512" height="512">
+      <span class="brand__text">
+        <strong class="brand__cn">济南奶龙职业技术学院</strong>
+        <span class="brand__en">JINAN NAILONG POLYTECHNIC</span>
+      </span>
+    </a>
+
+    <form class="search" role="search" onsubmit="return false">
+      <label class="sr-only" for="q">搜索院系</label>
+      <input id="q" type="search" placeholder="搜索院系 / 专业" autocomplete="off">
+      <button type="submit" aria-label="搜索">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      </button>
+    </form>
+  </div>
+</header>
+
+<!-- ============ 导航 ============ -->
+<nav class="nav" id="nav" aria-label="主导航">
+  <div class="wrap nav__inner">
+    <button class="nav__toggle" aria-expanded="false" aria-controls="nav-menu">
+      <span class="nav__bars" aria-hidden="true"></span>
+      <span class="nav__toggle-text">菜单</span>
+    </button>
+    <ul class="nav__menu" id="nav-menu">
+      <li><a class="is-active" href="#top">首页</a></li>
+      <li><a href="#about">学校概况</a></li>
+      <li><a href="#departments">院系设置</a></li>
+      <li><a href="#campus">校园风光</a></li>
+      <li><a href="#links">友情链接</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="main">
+
+<!-- ============ 首屏 ============ -->
+<section class="hero" id="top">
+  <div class="hero__slides" aria-hidden="true">
+    <div class="hero__slide is-on" style="background-image:url('assets/img/campus-1.jpg')"></div>
+    <div class="hero__slide" style="background-image:url('assets/img/campus-2.jpg')"></div>
+  </div>
+  <div class="hero__scrim" aria-hidden="true"></div>
+
+  <div class="wrap hero__inner">
+    <div class="hero__copy">
+      <p class="hero__eyebrow">JINAN NAILONG POLYTECHNIC</p>
+      <h1 class="hero__title">济南奶龙<br>职业技术学院</h1>
+      <p class="hero__motto">厚德 · 博学 · 干饭 · 摸鱼</p>
+      <p class="hero__desc">
+        一所只存在于域名里的学校。没有围墙，没有学费，也没有毕业证 ——
+        但有一枚正式的校徽，和一个非常认真的官网。
+      </p>
+      <div class="hero__cta">
+        <a class="btn btn--primary" href="#about">了解学校</a>
+        <a class="btn btn--ghost" href="#links">相关院校</a>
+      </div>
+    </div>
+
+    <img class="hero__mascot" src="assets/img/nailong.png" alt="校园形象大使" width="599" height="1200">
+  </div>
+
+  <div class="hero__dots" role="tablist" aria-label="校园图片切换">
+    <button class="hero__dot is-on" role="tab" aria-selected="true"  aria-label="图片 1"></button>
+    <button class="hero__dot"       role="tab" aria-selected="false" aria-label="图片 2"></button>
+  </div>
+</section>
+
+<!-- ============ 学校概况 ============ -->
+<section class="section" id="about">
+  <div class="wrap">
+    <header class="section__head">
+      <p class="section__en">ABOUT US</p>
+      <h2 class="section__title">学校概况</h2>
+      <p class="section__sub">一所严肃对待玩笑、玩笑对待严肃的学校</p>
+    </header>
+
+    <div class="about">
+      <div class="about__body">
+        <p>
+          济南奶龙职业技术学院是一所坐落于互联网上的高等职业院校，校址即域名，
+          校园面积取决于你的浏览器窗口有多大。
+        </p>
+        <p>
+          学校秉持「快乐第一、学业第二」的办学理念，开设多个紧贴当代青年生活的特色院系，
+          致力于培养「情绪稳定、饭量正常、能按时交作业」的应用型人才。
+        </p>
+        <p class="about__hint">
+          ⚠️ 再说明一次：本站是<strong>玩笑域名</strong>，不是学校，不招生、不收费、不发证。
+        </p>
+      </div>
+
+      <ul class="stats">
+        <li class="stat"><b class="stat__num">2026</b><span class="stat__label">建校年份</span></li>
+        <li class="stat"><b class="stat__num">6</b><span class="stat__label">特色院系</span></li>
+        <li class="stat"><b class="stat__num">0</b><span class="stat__label">在读学生</span></li>
+        <li class="stat"><b class="stat__num">∞</b><span class="stat__label">课间休息</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 院系设置 ============ -->
+<section class="section section--tint" id="departments">
+  <div class="wrap">
+    <header class="section__head">
+      <p class="section__en">DEPARTMENTS</p>
+      <h2 class="section__title">院系设置</h2>
+      <p class="section__sub">总有一个院系适合你（反正都不用交学费）</p>
+    </header>
+
+    <ul class="cards" id="cards">
+      <li class="card">
+        <span class="card__icon" aria-hidden="true">🐲</span>
+        <h3 class="card__title">奶龙学学院</h3>
+        <p class="card__desc">研究奶龙的快乐哲学、摇摆步态与情绪稳定机制。</p>
+        <p class="card__meta">核心课程：快乐学导论</p>
+      </li>
+      <li class="card">
+        <span class="card__icon" aria-hidden="true">🐟</span>
+        <h3 class="card__title">摸鱼学院</h3>
+        <p class="card__desc">培养在高强度工作环境中保持低强度输出的能力。</p>
+        <p class="card__meta">核心课程：屏幕常亮技术</p>
+      </li>
+      <li class="card">
+        <span class="card__icon" aria-hidden="true">🍚</span>
+        <h3 class="card__title">干饭学院</h3>
+        <p class="card__desc">食堂排队策略、加饭不加价，以及如何优雅地吃最后一口。</p>
+        <p class="card__meta">核心课程：打饭手速训练</p>
+      </li>
+      <li class="card">
+        <span class="card__icon" aria-hidden="true">😴</span>
+        <h3 class="card__title">睡眠科学学院</h3>
+        <p class="card__desc">早八生存指南、午睡工程，以及被窝热力学。</p>
+        <p class="card__meta">核心课程：闭眼听课法</p>
+      </li>
+      <li class="card">
+        <span class="card__icon" aria-hidden="true">🎮</span>
+        <h3 class="card__title">电子竞技学院</h3>
+        <p class="card__desc">嘴强王者培养、队友背锅学，以及掉线后的情绪管理。</p>
+        <p class="card__meta">核心课程：再来一把心理学</p>
+      </li>
+      <li class="card">
+        <span class="card__icon" aria-hidden="true">🧋</span>
+        <h3 class="card__title">奶茶工程学院</h3>
+        <p class="card__desc">三分糖力学、珍珠沉降实验，以及加料性价比分析。</p>
+        <p class="card__meta">核心课程：吸管流体力学</p>
+      </li>
+    </ul>
+    <p class="cards__empty" id="cardsEmpty" hidden>没有找到相关院系。要不试试「摸鱼」？</p>
+  </div>
+</section>
+
+<!-- ============ 校园风光 ============ -->
+<section class="section" id="campus">
+  <div class="wrap">
+    <header class="section__head">
+      <p class="section__en">CAMPUS</p>
+      <h2 class="section__title">校园风光</h2>
+      <p class="section__sub">图为示意，不代表真实校址（因为并没有真实校址）</p>
+    </header>
+
+    <div class="gallery">
+      <figure class="gallery__item gallery__item--wide">
+        <img src="assets/img/campus-1.jpg" alt="校园主楼与广场" loading="lazy" width="1080" height="608">
+        <figcaption>主楼广场 · 晴天</figcaption>
+      </figure>
+      <figure class="gallery__item">
+        <img src="assets/img/campus-2.jpg" alt="教学楼与花坛" loading="lazy" width="800" height="600">
+        <figcaption>教学楼 · 花坛</figcaption>
+      </figure>
+      <figure class="gallery__item gallery__item--logo">
+        <img src="assets/img/logo.png" alt="济南奶龙职业技术学院校徽" loading="lazy" width="512" height="512">
+        <figcaption>校徽 · 正式版</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 友情链接 ============ -->
+<section class="section section--tint" id="links">
+  <div class="wrap">
+    <header class="section__head">
+      <p class="section__en">LINKS</p>
+      <h2 class="section__title">友情链接</h2>
+      <p class="section__sub">本站为玩梗站点，下列院校与本站无隶属、合作或授权关系</p>
+    </header>
+
+    <div class="links">
+      <a class="linkcard" href="https://www.jngcxy.edu.cn/index.htm" target="_blank" rel="noopener noreferrer">
+        <span class="linkcard__icon" aria-hidden="true">🏫</span>
+        <span class="linkcard__text">
+          <strong>济南工程职业技术学院</strong>
+          <small>jngcxy.edu.cn · 官方网站</small>
+        </span>
+        <span class="linkcard__go" aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <p class="links__note">
+      链接指向该院校官方网站，点击后将在新标签页打开。
+    </p>
+  </div>
+</section>
+
 </main>
+
+<!-- ============ 页脚 ============ -->
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <div class="footer__brand">
+      <img src="assets/img/logo.png" alt="" width="512" height="512" loading="lazy">
+      <div>
+        <strong>济南奶龙职业技术学院</strong>
+        <span>JINAN NAILONG POLYTECHNIC</span>
+      </div>
+    </div>
+
+    <p class="footer__disclaimer">
+      <strong>免责声明：</strong>本站是一个玩笑域名，域名持有人与任何真实学校、教育机构、
+      招生单位均无关系，也不从事招生、收费、发证等任何业务。
+      本站使用的「奶龙」形象与名称，权利归其权利人所有，本站与权利人无任何关联。
+      如权利人认为本站内容不妥，请联系域名持有人，我们将立即处理。
+    </p>
+
+    <p class="footer__meta">
+      <span>域名：<code>xn--vhq90kl3fz5byvotjhjqlnj2b9s4b3it.icu</code></span>
+      <span>本站为静态页面，不收集任何个人信息</span>
+    </p>
+  </div>
+</footer>
+
 </body>
 </html>
