@@ -129,13 +129,18 @@ finally {
 # ------------------------------------------------------- 5. 本仓库文件自检
 Write-Section '5. 本仓库文件'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
-$cnamePath = Join-Path $here 'CNAME'
-if (Test-Path -LiteralPath $cnamePath) {
-    $cname = (Get-Content -LiteralPath $cnamePath -Raw).Trim()
-    if ($cname -eq $Domain) { Write-Pass "CNAME 内容正确: $cname" }
-    else { Write-Fail "CNAME 内容为 '$cname', 与域名不符" }
+
+# 重要: 仓库里绝对不能放 CNAME 文件。
+# 实测: 含 punycode 域名的 CNAME 文件会让 GitHub Pages 的 legacy 构建直接失败
+# (build status = errored, "Page build failed.", duration 0),
+# 而同样的域名改用 Pages 设置 (Settings -> Pages, 即 PUT /repos/:owner/:repo/pages)
+# 配置时构建正常。见 DEPLOY.md 第六节。
+if (Test-Path -LiteralPath (Join-Path $here 'CNAME')) {
+    Write-Fail 'CNAME 文件存在 —— 会导致 GitHub Pages 构建失败, 必须删除, 域名改在 Pages 设置里配'
 }
-else { Write-Fail 'CNAME 文件缺失' }
+else {
+    Write-Pass 'CNAME 文件不存在 (正确: 自定义域名走 Pages 设置, 不走 CNAME 文件)'
+}
 
 foreach ($f in @('index.html', '.nojekyll')) {
     if (Test-Path -LiteralPath (Join-Path $here $f)) { Write-Pass "$f 存在" }

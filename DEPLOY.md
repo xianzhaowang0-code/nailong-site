@@ -196,3 +196,71 @@ python3 -c "import socket;print(socket.getaddrinfo('xn--vhq90kl3fz5byvotjhjqlnj2
 # 3) 查 HTTP 与证书
 curl -sI "https://xn--vhq90kl3fz5byvotjhjqlnj2b9s4b3it.icu"
 ```
+
+## 六、GitHub Pages 实测踩坑：CNAME 文件在 punycode 域名上会导致构建失败
+
+这是 2026-10-14 在电脑端实际建站时踩到的坑，**推翻了本笔记前面「配套动作：仓库根目录放 `CNAME` 文件」的建议**。
+
+### 症状
+
+仓库建好、Pages 开启后，构建立刻失败：
+
+```
+pages.status   = errored
+build.status   = errored
+build.error    = "Page build failed."
+build.duration = 0          <-- 关键: 恒为 0, 构建任务根本没跑起来
+https_certificate.state = (空)
+```
+
+站点在自定义域名和 `xianzhaowang0-code.github.io/nailong-site/` 上**都**返回 404。
+说明不是「域名没指过来」，而是**构建从来没成功过**。
+
+### 排查过程
+
+| 步骤 | 操作 | 结果 |
+|---|---|---|
+| 1 | 浅克隆仓库，核对文件 | 文件齐全，`CNAME` 内容为正确的 punycode |
+| 2 | 访问 `github.io` 原始地址 | 同样 404 → 排除 DNS / 自定义域名指向问题 |
+| 3 | **从仓库删除 `CNAME` 文件**，清空 Pages 的 cname 设置，触发构建 | ✅ `built`，`duration=46185ms` |
+| 4 | 用 `PUT /repos/:owner/:repo/pages` 把 cname 设回同一域名（**仓库里仍无 `CNAME` 文件**） | ✅ `built`，`duration=26289ms` |
+
+### 结论
+
+**变量只有一个：仓库里有没有 `CNAME` 文件。**
+
+- 有 `CNAME` 文件（内容为 punycode 域名）→ `Page build failed.`
+- 无 `CNAME` 文件，域名改用 Pages 设置配置 → 构建成功
+
+GitHub Pages 的 legacy 构建器在处理 IDN / punycode 自定义域名时，
+无法正确消化仓库里的 `CNAME` 文件。**表现是构建整体失败**，
+而不是「域名没生效」这种相对温和的失败 —— 很容易误判成 DNS 问题。
+
+### 正确做法
+
+```bash
+# 不要往仓库里放 CNAME 文件。域名走 Pages 设置：
+
+# 开启 Pages, 源 = main 分支根目录
+POST /repos/:owner/:repo/pages
+{ "source": { "branch": "main", "path": "/" } }
+
+# 设置自定义域名 (punycode)
+PUT  /repos/:owner/:repo/pages
+{ "cname": "xn--vhq90kl3fz5byvotjhjqlnj2b9s4b3it.icu" }
+
+# 证书签发后强制 HTTPS
+PUT  /repos/:owner/:repo/pages
+{ "https_enforced": true }
+```
+
+网页端等价操作：Settings → Pages → Custom domain 填 punycode 域名。
+
+### 顺带记录
+
+- 第一次 `git push` 遇到 `502`，但 `ls-remote` 正常 → 属**偶发**，重试即可，不是权限问题
+- 推送时用 `git -c http.extraheader="Authorization: Basic <base64>"`，
+  token **不写进 `.git/config`**，避免明文落盘
+- 用经典 token 时 `repo` 是父级、必须整体勾选；
+  只勾子项 `repo: status` 拿不到建仓库 / 推送 / 配 Pages 的权限
+- 细粒度 token（`github_pat_` 开头）**没有创建仓库的权限**，`POST /user/repos` 返回 403
